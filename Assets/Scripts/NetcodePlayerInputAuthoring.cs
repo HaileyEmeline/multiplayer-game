@@ -22,5 +22,7 @@ public struct NetcodePlayerInput : IInputComponentData {
     //public bool shoot;
 
     //Correct way:
+
+    public InputEvent jump;
     public InputEvent shoot;
 }

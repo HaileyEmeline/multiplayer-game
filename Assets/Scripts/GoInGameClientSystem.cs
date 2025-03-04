@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEditor.UI;
+using UnityEngine.Rendering;
 
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 partial struct GoInGameClientSystem : ISystem
@@ -17,6 +18,9 @@ partial struct GoInGameClientSystem : ISystem
     //[BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
+        //New
+        //var prefab = SystemAPI.GetSingleton<Player>();
+
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
         foreach ((RefRO<NetworkId> networkId,
                  Entity entity) 
@@ -30,6 +34,8 @@ partial struct GoInGameClientSystem : ISystem
 
                     entityCommandBuffer.AddComponent(rpcEntity, new GoInGameRequestRPC());
                     entityCommandBuffer.AddComponent(rpcEntity, new SendRpcCommandRequest());
+
+                    //Entity camera = entityCommandBuffer.Instantiate(prefab.Camera);
 
         }
         entityCommandBuffer.Playback(state.EntityManager);

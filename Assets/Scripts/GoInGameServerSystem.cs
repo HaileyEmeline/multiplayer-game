@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.NetCode;
@@ -45,6 +46,9 @@ partial struct GoInGameServerSystem : ISystem
 
                       //Gets the network ID for the server to use in the ghostowner below
                       NetworkId networkId = SystemAPI.GetComponent<NetworkId>(ReceiveRpcCommandRequest.ValueRO.SourceConnection);
+                      //var localPlayerId = SystemAPI.GetSingleton<NetworkId>().Value;
+
+                      
 
                       //We set up hasOwner to be true in the prefab, so that the client owns
                       //the playable character instead of the server. Now we have to set that up here:
