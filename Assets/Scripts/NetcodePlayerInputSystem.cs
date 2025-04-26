@@ -18,7 +18,7 @@ partial struct NetcodePlayerInputSystem : ISystem
     //public Vector3 mousePos;
     public Entity mouseEntity;
     
-    [BurstCompile]
+    //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         //Requires a connection to update
@@ -28,7 +28,7 @@ partial struct NetcodePlayerInputSystem : ISystem
 
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
 
@@ -118,7 +118,7 @@ partial struct NetcodePlayerInputSystem : ISystem
         }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
         

@@ -7,9 +7,10 @@ using Unity.NetCode;
 using Unity.Physics;
 using Unity.Transforms;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+//used to include experimental graphview as well
 
 [UpdateInGroup(typeof(PredictedSimulationSystemGroup))] 
 //[UpdateAfter(typeof(GhostInputSystemGroup))]
@@ -23,7 +24,6 @@ partial struct BulletSystem : ISystem
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<NetcodePlayerInputSystem>();
         //state.RequireForUpdate<MousePosition>();
-
         
     }
     
@@ -34,6 +34,11 @@ partial struct BulletSystem : ISystem
 
         if (playerEntity == Entity.Null) {
             playerEntity = SystemAPI.GetSingletonEntity<PlayerPosition>();
+        }
+
+        int localPlayerNetworkId = -1;
+        foreach (var ghostOwner in SystemAPI.Query<RefRO<GhostOwner>>().WithAll<GhostOwnerIsLocal>()) {
+            localPlayerNetworkId = ghostOwner.ValueRO.NetworkId;
         }
 
 
@@ -49,14 +54,15 @@ partial struct BulletSystem : ISystem
 
             bool foundLocalInput = false;
 
-            
 
-
-            foreach (var inputState in SystemAPI.Query<RefRO<PlayerInputStateGhost>>().WithAll<GhostOwnerIsLocal>()) { //used to have with all ghost owner
+            foreach (var (inputState, ghostOwner) in SystemAPI.Query<RefRO<PlayerInputStateGhost>, RefRO<GhostOwner>>()) { //used to have with all ghost owner
+                
+                if (ghostOwner.ValueRO.NetworkId == localPlayerNetworkId) {
                 foundLocalInput = true;
                 float3 aimDirection = inputState.ValueRO.aimDirection;
 
-                Debug.Log("Aim Direction: " + aimDirection);
+                Debug.Log("Aim Direction: " + aimDirection + ghostOwner.ValueRO.NetworkId);
+
 
                 //if (math.lengthsq(aimDirection) > 0f) {
                   //  aimDirection = math.normalize(aimDirection);
@@ -65,6 +71,7 @@ partial struct BulletSystem : ISystem
                 //}
 
                 //Debug.Log("Aim Direction: " + aimDirection);
+                //if ghost owner local, else set to all 0s
                 localTransform.ValueRW.Position += aimDirection * moveSpeed * SystemAPI.Time.DeltaTime;
 
                 //To destroy
@@ -75,6 +82,8 @@ partial struct BulletSystem : ISystem
                         entityCommandBuffer.DestroyEntity(entity);
                     }
                 }
+
+                } //with the if
             }
 
             if (foundLocalInput == false) {

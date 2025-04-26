@@ -12,7 +12,7 @@ using Unity.VisualScripting;
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 partial struct PlayerMouseState : ISystem
 {
-    [BurstCompile]
+    //[BurstCompile]
     public void OnUpdate(ref SystemState systemState)
     {
 
@@ -22,8 +22,8 @@ partial struct PlayerMouseState : ISystem
             PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
             CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
 
-            UnityEngine.Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPosition.z = 0f;
+            //UnityEngine.Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //mouseWorldPosition.z = 0f;
 
             /*foreach (var (character, inputState) in SystemAPI.Query<CharacterAspect, PlayerInputStateGhost>().WithAll<GhostOwnerIsLocal>()) {
                 UnityEngine.Vector3 playerPosition = character.Transform.ValueRO.Position;
@@ -39,6 +39,9 @@ partial struct PlayerMouseState : ISystem
             {
                 //Debug.Log("Found an entity");
                 // Get the player's position from characterAspect (now a localtransform)
+                UnityEngine.Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mouseWorldPosition.z = 0f;
+
                 UnityEngine.Vector3 playerPosition = characterAspect.ValueRO.Position;
                 playerPosition.z = 0f;
 
@@ -60,7 +63,8 @@ partial struct PlayerMouseState : ISystem
 
             //Update IComponent to be read
 
-        }
+        } 
+
     }
 }
 

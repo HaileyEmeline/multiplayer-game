@@ -16,7 +16,7 @@ partial struct NetcodePlayerMovementSystem : ISystem
 
     private Entity playerEntity;
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         //Tries to make the playerposition struct to always update position
@@ -24,7 +24,7 @@ partial struct NetcodePlayerMovementSystem : ISystem
         //state.EntityManager.SetComponentData(playerEntity, new PlayerPosition { position = new Vector3(0, 0, 0) });
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
 
@@ -75,18 +75,18 @@ partial struct NetcodePlayerMovementSystem : ISystem
                   }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
         
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     private void SetRotation(Entity player, LocalTransform playerTransform) { //Add player aspect?
         //Sets player to face direction moving - come back to this
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     private void SetVelocity(Entity player, PhysicsVelocity playerVelocity, PlayerAspect playerAspect) { //Add player aspect?
         
         
@@ -105,6 +105,6 @@ public struct PlayerPosition : IComponentData
     public Vector3 position;
 }
 
-public struct MousePosition : IComponentData {
+public struct MousePosition : IInputComponentData {
     public float3 direction;
 }

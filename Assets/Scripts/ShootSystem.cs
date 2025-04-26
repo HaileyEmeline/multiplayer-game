@@ -5,14 +5,29 @@ using Unity.NetCode;
 using Unity.Transforms;
 
 [UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
+
 partial struct ShootSystem : ISystem
 {
 
     //[BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
+
+        //Ensure that EntitiesReferences is available before accessing it
+        if (!SystemAPI.TryGetSingleton<EntitiesReferences>(out var entitiesRef))
+        {
+        //UnityEngine.Debug.LogWarning("EntitiesReferences not available yet, skipping system update.");
+            return;
+        }
         //Get the network time
-        NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
+        //NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
+
+        // Ensure that NetworkTime is available before accessing it
+        if (!SystemAPI.TryGetSingleton<NetworkTime>(out var networkTime))
+        {
+            //UnityEngine.Debug.LogWarning("NetworkTime not available yet, skipping system update.");
+            return;
+        }
 
         //Allows us to grab reference for the bullet entity
         EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();

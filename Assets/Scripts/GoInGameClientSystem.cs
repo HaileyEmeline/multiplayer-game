@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
-using UnityEditor.UI;
 using UnityEngine.Rendering;
+
+//Used to also be using UI
 
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 partial struct GoInGameClientSystem : ISystem
@@ -32,8 +34,14 @@ partial struct GoInGameClientSystem : ISystem
 
                     Entity rpcEntity = entityCommandBuffer.CreateEntity();
 
-                    entityCommandBuffer.AddComponent(rpcEntity, new GoInGameRequestRPC());
-                    entityCommandBuffer.AddComponent(rpcEntity, new SendRpcCommandRequest());
+                    entityCommandBuffer.AddComponent(rpcEntity, new GoInGameRequestRPC {
+                        AuthPlayerId = Unity.Services.Authentication.AuthenticationService.Instance.PlayerId
+                    }); //Used to not have {}
+                    entityCommandBuffer.AddComponent(rpcEntity, new SendRpcCommandRequest {
+                        TargetConnection = entity
+                    }); //Maybe take out the {}
+                    //SendRpcCommandRequest request = new SendRpcCommandRequest { TargetConnection = entity }; // Maybe switch back to line above?
+
 
                     //Entity camera = entityCommandBuffer.Instantiate(prefab.Camera);
 
@@ -51,5 +59,5 @@ partial struct GoInGameClientSystem : ISystem
 }
 
 public struct GoInGameRequestRPC : IRpcCommand {
-
+    public FixedString64Bytes AuthPlayerId;
 }

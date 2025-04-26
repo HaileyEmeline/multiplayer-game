@@ -14,7 +14,7 @@ partial struct GoInGameServerSystem : ISystem
     //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<EntitiesReferences>();
+        //state.RequireForUpdate<EntitiesReferences>(); - MAYBE BRING BACK ! 
         state.RequireForUpdate<NetworkId>();
     }
 
@@ -27,12 +27,14 @@ partial struct GoInGameServerSystem : ISystem
         //Used to help spawn the player object
         EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
-        foreach ((RefRO<ReceiveRpcCommandRequest> ReceiveRpcCommandRequest, 
+        foreach ((RefRO<ReceiveRpcCommandRequest> ReceiveRpcCommandRequest, RefRO<GoInGameRequestRPC> goInGameRequest,
                   Entity entity) 
-                  in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>>().WithAll<GoInGameRequestRPC>().WithEntityAccess()) {
+                  in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<GoInGameRequestRPC>>().WithAll<GoInGameRequestRPC>().WithEntityAccess()) {
+
+                      var sourceConnection = ReceiveRpcCommandRequest.ValueRO.SourceConnection;
                       
                       //Add the Ingame component to the network connection
-                      entityCommandBuffer.AddComponent<NetworkStreamInGame>(ReceiveRpcCommandRequest.ValueRO.SourceConnection);
+                      entityCommandBuffer.AddComponent<NetworkStreamInGame>(sourceConnection);
                       
                       UnityEngine.Debug.Log("Client Connected to Server");
 
@@ -55,7 +57,12 @@ partial struct GoInGameServerSystem : ISystem
                       entityCommandBuffer.AddComponent(playerEntity, new GhostOwner {
                         NetworkId = networkId.Value,
                       });
+
+                      Debug.Log($"PlayerID: " + goInGameRequest.ValueRO.AuthPlayerId.ToString()); // shouldn't print null
+                      ServerPlayerTracker.ConnectedClientIds.Add(goInGameRequest.ValueRO.AuthPlayerId.ToString());
                       //Says ghost owner is the one who sent the RPC, which was the cleint ^^
+
+                      Debug.Log($"Connected Client ID count: {ServerPlayerTracker.ConnectedClientIds.Count}");
 
 
                       //Uses buffer to destroy the RPC
@@ -65,7 +72,7 @@ partial struct GoInGameServerSystem : ISystem
                   entityCommandBuffer.Playback(state.EntityManager);
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
         

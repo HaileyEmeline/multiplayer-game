@@ -14,14 +14,14 @@ partial struct CameraSystem : ISystem
     //Also might want to make x and y somewhat dependent on the mouse position
     public static readonly float3 offset = new float3(0, 0, -1);
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<NetworkStreamInGame>();
         state.RequireForUpdate<Player>();
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         var camera = UnityEngine.Camera.main;
@@ -32,7 +32,7 @@ partial struct CameraSystem : ISystem
         }
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
         
