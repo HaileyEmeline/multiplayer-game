@@ -516,3 +516,12 @@ I remember in Advanced Programming, you had us write what grade you believe we d
 5. Final project: I accomplished everything I set out to wihtin my final project, and while I did not reach my stretch goals, I believe I showed both a deep understanding of the subject matter and completed a project that demonstrates this understanding. The final project is fully functional and well-documented, and includes in-server interactions (shooting, gravity, collisions) and server infrastructure (matchmaking, etc). 43/45
 
 #### Final Thoughts
+
+
+
+# LEFT TO DO
+- Finish Backlog (1 hour)
+- Final thoughts (1 hour)
+- Cite sources (2 hours)
+- Video (2 hours)
+- Final test and build (1 hour)
