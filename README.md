@@ -517,6 +517,144 @@ I remember in Advanced Programming, you had us write what grade you believe we d
 
 #### Final Thoughts
 
+#### Sources Cited (IEEE)
+
+[1]“Struct NetworkStreamDriver
+ | Netcode for Entities | 1.1.0-pre.3,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.1/api/Unity.netCode.networkStreamDriver.html (accessed May 04, 2025).
+ 
+[2]Unity Technologies, “How to control Netcode child entities,” Unity Discussions, Apr. 27, 2024. https://discussions.unity.com/t/how-to-control-netcode-child-entities/945744 (accessed May 04, 2025).
+
+[3]Code Monkey, “- YouTube,” www.youtube.com, Dec. 09, 2024. https://www.youtube.com/watch?v=HpUmpw_N8BA
+
+[4]Code Monkey, “Run your Dedicated Servers like a PRO! (Unity Game Server Hosting Multiplayer Tutorial),” YouTube, Mar. 15, 2023. https://www.youtube.com/watch?v=IvCVFywNXMc (accessed May 04, 2025).
+
+[5]Code Monkey, “Making a MULTIPLAYER Game? Join your Players with LOBBY!,” YouTube, Nov. 29, 2022. https://www.youtube.com/watch?v=-KDlEBfCBiU (accessed May 04, 2025).
+
+[6]Memphis Game Developers, “Netcode for Entities: Unity Physics,” YouTube, Jul. 22, 2023. https://www.youtube.com/watch?v=BsZHB_JxxNo (accessed May 04, 2025).
+
+[7]Developers Hub, “Netcode for Entities For Beginners (DOTS) #05 Input,” YouTube, Dec. 31, 2023. https://www.youtube.com/watch?v=1DsdC38PYvg (accessed May 04, 2025).
+
+[8]“Struct NetworkId
+   | Netcode for Entities | 1.0.17,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.0/api/Unity.netCode.networkId.html (accessed May 04, 2025).
+   
+[9]“Class GhostFieldAttribute
+   | Netcode for Entities | 1.0.17,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.0/api/Unity.netCode.GhostFieldAttribute.html (accessed May 04, 2025).
+
+[10]“Connecting server and clients | Netcode for Entities | 1.3.6,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.3/manual/network-connection.html (accessed May 04, 2025).
+
+[11]“Time synchronization | Netcode for Entities | 1.3.6,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.3/manual/time-synchronization.html (accessed May 04, 2025).
+
+[12]“Entities list | Netcode for Entities | 1.0.17,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.0/manual/entities-list.html (accessed May 04, 2025).
+
+[13]Unity-Technologies, “com.unity.services.samples.matchplay/Assets/Scripts/Matchplay/Server/Netcode at master · Unity-Technologies/com.unity.services.samples.matchplay,” GitHub, 2022. https://github.com/Unity-Technologies/com.unity.services.samples.matchplay/tree/master/Assets/Scripts/Matchplay/Server/Netcode (accessed May 04, 2025).
+
+[14]Unity Technologies, “(Question) NetCode How to Identify Local Player,” Unity Discussions, Mar. 29, 2020. https://discussions.unity.com/t/question-netcode-how-to-identify-local-player/782893/2 (accessed May 04, 2025).
+
+[15]Unity Technologies, “[netcode] How to get connected clients on client side?,” Unity Discussions, Jan. 28, 2023. https://discussions.unity.com/t/netcode-how-to-get-connected-clients-on-client-side/251253/4 (accessed May 04, 2025).
+
+[16]“Build a session with Netcode for Entities,” Unity.com, 2025. https://docs.unity.com/ugs/en-us/manual/mps-sdk/manual/build-with-netcode-for-entities (accessed May 04, 2025).
+
+[17]Unity Technologies, “Can’t connect Netcode for Entities to Lobby and Relay,” Unity Discussions, Jul. 22, 2022. https://discussions.unity.com/t/cant-connect-netcode-for-entities-to-lobby-and-relay/885191/5 (accessed May 04, 2025).
+
+[18]Unity Technologies, “NetworkManager.Singletion.StartServer vs NetworkManager.Singletion.Starthost in Netcode,” Unity Discussions, Nov. 30, 2023. https://discussions.unity.com/t/networkmanager-singletion-startserver-vs-networkmanager-singletion-starthost-in-netcode/934634 (accessed May 04, 2025).
+
+[19]Unity-Technologies, “megacity-metro/Assets/Scripts/Gameplay/Server/Netcode/ServerInGame.cs at master · Unity-Technologies/megacity-metro,” GitHub, 2024. https://github.com/Unity-Technologies/megacity-metro/blob/master/Assets/Scripts/Gameplay/Server/Netcode/ServerInGame.cs (accessed May 04, 2025).
+
+[20]“Prediction | Netcode for Entities | 1.4.0,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.4/manual/prediction.html (accessed May 04, 2025).
+
+[21]“Command stream | Netcode for Entities | 1.0.17,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.0/manual/command-stream.html (accessed May 04, 2025).
+
+[22]InterfaceBE, “Reddit - The heart of the internet,” Reddit.com, 2022. https://www.reddit.com/r/Unity3D/comments/slhkzk/best_practices_for_netcode_player_input_in/ (accessed May 04, 2025).
+
+[23]“Namespace Unity.netCode
+   | Netcode for Entities | 1.0.17,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.netcode@1.0/api/Unity.netCode.html (accessed May 04, 2025).
+   
+[24]Unity Technologies, “Spawn bullet from Camera [Netcode],” Unity Discussions, Dec. 10, 2022. https://discussions.unity.com/t/spawn-bullet-from-camera-netcode/255649 (accessed May 04, 2025).
+
+[25]Unity Technologies, “How to attach a camera to a ghost/prefab when using Unity NetCode?,” Unity Discussions, Jun. 09, 2020. https://discussions.unity.com/t/how-to-attach-a-camera-to-a-ghost-prefab-when-using-unity-netcode/792539/4 (accessed May 04, 2025).
+
+[26]“How to Get Started with Netcode in Unity ECS | Moetsi,” Moetsi.com, 2019. https://www.moetsi.com/ar-development/how-to-get-started-with-netcode-in-unity-ecs (accessed May 04, 2025).
+
+[27]“Client and server worlds networking model | Netcode for Entities | 1.4.0,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.4/manual/client-server-worlds.html (accessed May 04, 2025).
+
+[28]“Setting up client and server worlds | Netcode for Entities | 1.4.0,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.4/manual/set-up-client-server-worlds.html (accessed May 04, 2025).
+
+[29]“Creating multiplayer gameplay | Netcode for Entities | 1.4.0,” Unity3d.com, 2024. https://docs.unity3d.com/Packages/com.unity.netcode@1.4/manual/creating-multiplayer-gameplay.html (accessed May 04, 2025).
+
+[30]Unity Technologies, “Collision Behaviour in Multiplayer with netcode,” Unity Discussions, Jun. 10, 2024. https://discussions.unity.com/t/collision-behaviour-in-multiplayer-with-netcode/949854 (accessed May 04, 2025).
+
+[31]Unity Technologies, “How to make Unity physics material work with netcode?,” Unity Discussions, Apr. 27, 2022. https://discussions.unity.com/t/how-to-make-unity-physics-material-work-with-netcode/879681 (accessed May 04, 2025).
+
+[32]Freedom Coding, “Game Server Hosting (MULTIPLAY) || Unity Tutorial,” YouTube, Apr. 01, 2024. https://www.youtube.com/watch?v=D1wJO5SrUmc (accessed May 04, 2025).
+
+[33]Freedom Coding, “Group Players Together Easily || Unity Matchmaker Tutorial,” YouTube, Apr. 08, 2024. https://www.youtube.com/watch?v=aUBP_L4rYrg (accessed May 04, 2025).
+
+[34]“Method GetPayloadAllocationFromJsonAs
+ | Multiplay | 1.1.1,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.services.multiplay@1.1/api/Unity.Services.Multiplay.IMultiplayService.GetPayloadAllocationFromJsonAs.html (accessed May 04, 2025).
+ 
+ [35]Unity Technologies, “Multiplay API is not initialized,” Unity Discussions, Nov. 28, 2024. https://discussions.unity.com/t/multiplay-api-is-not-initialized/938020/3 (accessed May 04, 2025).
+ 
+ [36]“Multiplay Hosting support,” Unity.com, 2025. https://docs.unity.com/ugs/en-us/manual/mps-sdk/manual/game-server-hosting-support (accessed May 04, 2025).
+ 
+ [37]Unity Technologies, “InvalidOperationException: Unable to get IMultiplayService because Multiplay API is not initialized,” Unity Discussions, Apr. 09, 2025. https://discussions.unity.com/t/invalidoperationexception-unable-to-get-imultiplayservice-because-multiplay-api-is-not-initialized/1627553/2 (accessed May 04, 2025).
+ 
+[38]Unity Technologies, “Unity Multiplay Service gets stuck in OnAllocate at GetPayloadAllocation,” Unity Discussions, Jun. 15, 2023. https://discussions.unity.com/t/unity-multiplay-service-gets-stuck-in-onallocate-at-getpayloadallocation/920755 (accessed May 04, 2025).
+
+[39]Unity Technologies, “Exception thrown when calling ReadyServerForPlayersAsync with Multiplay 1.0.4 package,” Unity Discussions, Jun. 18, 2023. https://discussions.unity.com/t/exception-thrown-when-calling-readyserverforplayersasync-with-multiplay-1-0-4-package/920080/9 (accessed May 04, 2025).
+
+[40]“Method StartServerQueryHandlerAsync
+ | Multiplay | 1.1.1,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.services.multiplay@1.1/api/Unity.Services.Multiplay.IMultiplayService.StartServerQueryHandlerAsync.html (accessed May 04, 2025).
+
+[41]“Property ServerConfig
+ | Multiplay | 1.1.1,” Unity3d.com, 2023. https://docs.unity3d.com/Packages/com.unity.services.multiplay@1.1/api/Unity.Services.Multiplay.IMultiplayService.ServerConfig.html#Unity_Services_Multiplay_IMultiplayService_ServerConfig (accessed May 04, 2025).
+
+[42]Jason Weimann (GameDev), “Full Tutorial: Multiplayer Matchmaking and Dedicated Server Setup for any game,” YouTube, Feb. 20, 2024. https://www.youtube.com/watch?v=yqntalzsgL0 (accessed May 04, 2025).
+
+[43]Unity Technologies, “Static variables for multiplayer game session management,” Unity Discussions, Jul. 27, 2021. https://discussions.unity.com/t/static-variables-for-multiplayer-game-session-management/849933 (accessed May 04, 2025).
+
+[44]“Deploy a Multiplay build configuration,” Unity.com, 2025. https://docs.unity.com/ugs/en-us/manual/mps-sdk/manual/deployment/deploy-multiplay-configuration (accessed May 04, 2025).
+
+[45]“Working with the Multiplayer Services SDK,” Unity.com, 2025. https://docs.unity.com/ugs/en-us/manual/mps-sdk/manual/working-with-mps (accessed May 04, 2025).
+
+[46]“Multiplay Hosting API Workflows,” Unity.com, 2025. https://docs.unity.com/ugs/en-us/manual/game-server-hosting/manual/guides/api-workflows (accessed May 04, 2025).
+
+[47]Unity Technologies, “Unity - Manual: The Multiplayer High Level API,” Unity3d.com, 2018. https://docs.unity3d.com/2018.2/Documentation/Manual/UNetUsingHLAPI.html (accessed May 04, 2025).
+
+[48]KRIUNS, “Create Your Own Multiplayer Game Lobby with Unity Lobby Service - A Step-by-Step Guide | KRIUNS,” YouTube, Apr. 01, 2023. https://www.youtube.com/watch?v=AJcTQKPpdSw (accessed May 04, 2025).
+
+[49]Memphis Game Developers, “Netcode for Entities: Client Side Prediction (Rollback),” YouTube, Jul. 30, 2023. https://www.youtube.com/watch?v=SKk5KnwAM64 (accessed May 04, 2025).
+
+[50]Turbo Makes Games, “Make Camera Follow Entities in Unity ECS (Plus Cinemachine) - DOTS Tutorial [Old Version of ECS],” YouTube, Jun. 09, 2020. https://www.youtube.com/watch?v=JFv49-0vy_8 (accessed May 04, 2025).
+
+[51]Turbo Makes Games, “How to Make a Multiplayer Game with DOTS - FULL COURSE,” YouTube, Mar. 15, 2024. https://www.youtube.com/watch?v=8efRGtRCGJ0 (accessed May 04, 2025).
+
+[52]Tale Forge, “Physics in Unity ECS - Rigidbody, PhysicsShape, PhysicsBody,” YouTube, May 28, 2024. https://www.youtube.com/watch?v=_DA2yei9srQ (accessed May 04, 2025).
+
+[53]Tale Forge, “Is Player Grounded? - Jump in Unity ECS - Unsafe Code, Pointers, OverlapBox,” YouTube, Jun. 30, 2024. https://www.youtube.com/watch?v=vT0XiVbjzlc (accessed May 04, 2025).
+
+[54]BiteMe Games, “Using Unity with Git in 15 minutes,” YouTube, Jul. 18, 2023. https://www.youtube.com/watch?v=30qiV2YA7gA (accessed May 04, 2025).
+
+[55]Unity MMO Developers, “Episode 4: Playfab Setup | uMMORPG Part 1 | Unity MMO Creators,” YouTube, Oct. 22, 2018. https://www.youtube.com/watch?v=ufT43p6Hbaw (accessed May 04, 2025).
+
+[56]Alexandre Bruffa, “Building a Real-Time Multiplayer Game With Unity3D and Amazon GameLift,” YouTube, Jun. 09, 2023. https://www.youtube.com/watch?v=lZ4a_ZKanT4 (accessed May 04, 2025).
+
+[57]Memphis Game Developers, “Getting started with Unity Server Hosting and Matchmaking,” YouTube, Sep. 24, 2022. https://www.youtube.com/watch?v=yUoxYOMzwx8 (accessed May 04, 2025).
+
+[58]samyam, “How to Setup Dedicated Server Hosting and Matchmaking for Unity,” YouTube, May 03, 2023. https://www.youtube.com/watch?v=FjOZrSPL_-Y (accessed May 04, 2025).
+
+[59]Unity Technologies, “Memory leak with Entity Query,” Unity Discussions, Aug. 12, 2019. https://discussions.unity.com/t/memory-leak-with-entity-query/754165 (accessed May 04, 2025).
+
+[60]Unity Technologies, “ComputeBuffer warning when component uses ExecuteInEditMode,” Unity Discussions, May 16, 2022. https://discussions.unity.com/t/computebuffer-warning-when-component-uses-executeineditmode/780291/5 (accessed May 04, 2025).
+
+[61]S. Staff, “🌟 C# Collection Types: HashSet vs. List 🚀 - Shawna Staff - Medium,” Medium, Sep. 07, 2023. https://medium.com/@shawnastaff/c-collection-types-hashset-vs-list-bae022e7b439 (accessed May 04, 2025).
+
+[62]“ClientRpc | Unity Multiplayer Networking,” docs-multiplayer.unity3d.com, Apr. 28, 2023. https://docs-multiplayer.unity3d.com/netcode/current/advanced-topics/message-system/clientrpc/
+
+
+
+
+
+
 
 
 # LEFT TO DO
