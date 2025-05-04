@@ -444,7 +444,7 @@ Backfill is the ability for players to join servers once they are already starte
   string backfillTicketId = payloadAllocation.BackfillTicketId;
 ```
 
-PayloadAllocation is not an existing function, and needs to be manually programmed in:
+PayloadAllocation is not an existing function, but is one needed for this process, and needs to be manually programmed in exactly as is done here:
 
 ```
 [System.Serializable]
@@ -458,6 +458,28 @@ public class PayloadAllocation {
   public string MatchId;
   public string PoolId;
 }
+```
+
+The way that we tell the servers that there are still some empty spaces, and so more players can join, is by approving the backfill ticket. In the update method, we check to ensure that the backfill ticket Id exists and that the number of collected clients is fewer than the server limit: if both are true, we run ```BackfillTicket backfillTicket = await MatchmakerService.Instance.ApproveBackfillTicketAsync(backfillTicketId);``` to approve the ticket. We get the count of clients from the Hashset detailed above.
+
+The backfill ticket must stay updated with the correct list of current clients on the server, so we update it whenever a player connects or disconnects by using the built-in Unity functions ```OnPlayerConnected()``` and ```OnPlayerDisconnected```. The update code starts by reforming the list of players, by populating a list with the Network Ids set in the Hashset. We then use the MatchProperties class to redefine the properties for the match, using the list of players we created and the backfill ticket Id. Finally, we update the backfill ticket with the Id stored in the payload allocation, replacing it with a new backfill ticket with the new backfill Id, and the properties defined in MatchProperties. 
+
+In total, the code for updating the backfill ticket looks like this:
+```
+        //Creates a list of players
+        List<Unity.Services.Matchmaker.Models.Player> players = new List<Unity.Services.Matchmaker.Models.Player>();
+
+        //Adds all players connected to server to list
+        foreach (var playerId in ServerPlayerTracker.ConnectedClientIds) {
+            players.Add(new Unity.Services.Matchmaker.Models.Player(playerId.ToString()));
+        }
+
+        //States the settings of this server
+        MatchProperties matchProperties = new MatchProperties(null, players, null, backfillTicketId);
+
+        //Update the backfill ticket with the list of players and match settings
+        await MatchmakerService.Instance.UpdateBackfillTicketAsync(payloadAllocation.BackfillTicketId, 
+            new BackfillTicket(backfillTicketId, properties: new BackfillTicketProperties(matchProperties)));
 ```
 
 ### Reflection
@@ -516,6 +538,10 @@ I remember in Advanced Programming, you had us write what grade you believe we d
 5. Final project: I accomplished everything I set out to wihtin my final project, and while I did not reach my stretch goals, I believe I showed both a deep understanding of the subject matter and completed a project that demonstrates this understanding. The final project is fully functional and well-documented, and includes in-server interactions (shooting, gravity, collisions) and server infrastructure (matchmaking, etc). 43/45
 
 #### Final Thoughts
+
+Overall, this project has been one of the highlights of my time as a computer science major, but has also been the most stressful topic I have broached. I often found myself stuck for weeks with no real resources to utilize, and having to try solution after solution until one worked. Looking back, I wish I had chosen Netcode for GameObjects, as I believe I could have created at least a lobby on top of what I have, and probably more. Furthermore, I would have had many more resources, both in terms of people to go to, source projects to analyze, and documentation to read. 
+
+With that being said, I am very proud of what I did accomplish. The lack of documentation and resources meant that good portions of the code were made entirely by my connecting tidbits of what tutorials did exist, and this led to a much greater understanding of what I was working on. I believe that, with another month, I could have produced a much stronger prototype with lobby, graphics, and more. As it is, however, I believe I met my expectations for the project going in, and exceeded my expectations throughout many points of the semester as I realized how difficult what I had signed up for actually was.
 
 #### Sources Cited (IEEE)
 
@@ -658,8 +684,5 @@ I remember in Advanced Programming, you had us write what grade you believe we d
 
 
 # LEFT TO DO
-- Finish Backlog (1 hour)
-- Final thoughts (1 hour)
-- Cite sources (2 hours)
 - Video (2 hours)
 - Final test and build (1 hour)
