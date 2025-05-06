@@ -482,6 +482,49 @@ In total, the code for updating the backfill ticket looks like this:
             new BackfillTicket(backfillTicketId, properties: new BackfillTicketProperties(matchProperties)));
 ```
 
+#### Multiplay and Matchmaker Settings in Unity Cloud
+
+All of the Unity Multiplayer services need to be initially set up in the Unity Cloud, in a browser, prior to being used in projects. For Multiplay hosting, which is the actual server hosting, you begin by uploading your build to the cloud. Every time any server-related code is updated, the build needs to be reuploaded to Unity Cloud. We then create a build configuration, which tells the server to build using sqp servers (the only option currently available) and with the following launch parameters:
+
+```
+-nographics -batchmode -port $$port$$ -queryport $$query_port$$ -logFile $$log_dir$$/Engine.log -native-leak-detection EnabledWithStackTrace
+```
+
+These were the default launch parameters outside of the first two. Nographics ensures that graphics are not rendered, which they do not need to be within the dedicated server itself, which saves time and cuts the graphics out of the server logs. Batchmode is essential for the automation of dedicated servers, as it prevents pop-ups and GUI issues. The other parameters create a port, specifies a path for Unity's log outputs, and enables memory leak detection.
+
+Next we create a fleet. Here, we determine how many servers can be running per machine (basically, how much of the machine is needed per server - what percentage of the CPU). Then, we can decide the minimum and maximum number of these servers that can be running at one time. I have the minimum set to zero, because even an empty server can incur charges. 
+
+To make servers, we then simply have to create test allocations, and Unity Cloud utilizes the build, configuration, and fleet to set them up to our designation.
+
+Matchmaker is even easier to set up. We create a queue for the tickets, and designate the minimum and maximum number of players allowed on the queue. We also decide how many pools there are on the queue; pool ordering dictates which pool tickets will be attempt to fill first. Within these pools, we can set up the rules for matchmaking. We set it to use the build configuration and fleet set up in Multiplay hosting, and then define the rules through JSON:
+
+```
+{
+  "Name": "ffa",
+  "MatchDefinition": {
+    "Teams": [
+      {
+        "Name": "ffa",
+        "TeamCount": {
+          "Min": 1,
+          "Max": 1
+        },
+        "PlayerCount": {
+          "Min": 2,
+          "Max": 2
+        }
+      }
+    ],
+    "MatchRules": []
+  },
+  "BackfillEnabled": true
+}
+```
+
+Currently, what this code does is simply state that each match must have one team with two players on it. Therefore, the server will wait until two players attempt to connect at the same time before allowing either to join. Lastly, we enable backfill. While I have this configured in a very straightforward manner, there is quite a bit more to matchmaking. You can define custom rules, limiting players from joining pools based on skill levels, regions, or other arbitrary variables set up. You can also make multiple types of matches; we only use one, called ffa, but adding a second would be very straightforward through the creation of another pool. Lastly, you can relax the minimum number of players required as time passes. While I have the minimum being two players, I could set it so that every ten seconds, it requires one fewer player to connect to the server, to prevent players from having to wait too long.
+
+This is all that is needed in Unity Cloud to set up a simple system for joining players into dedicated servers through Matchmaker and Multiplay hosting. Our code within Unity interacts with everything we have set up here in the ways described above to handle the actual connections.
+
 ### Reflection
 
 Overall, I am very satisfied with what I learned throughout this Independent Study. My goal for this study was to come away from it with a basis to build a full multiplayer game off of, as well as the knowledge to continue this endeavor, and I believe I gained both of those things. I am far more comfortable with the Unity editor as a whole, I feel like I have a decent understanding of Netcode for Entities and the DOTS system it is built off of, and I know how to build off of the framework I have set up in terms of server infrastructure. 
@@ -531,11 +574,11 @@ Lastly, I switched the development notebook from being submitted weekly to being
 
 I remember in Advanced Programming, you had us write what grade you believe we deserve on the open-ended projects, and I decided to do this here as well.
 
-1. A short paper outlining the benefits and drawbacks of each server provider: I completed this to the best of my ability, and while my plans eventually changed, I had all the information I could prior to actually beginning to code. 10/10
+1. A short paper outlining the benefits and drawbacks of each server provider: I completed this to the best of my ability, and while my plans eventually changed, I had all the information I could prior to actually beginning to code. 9/10
 2. A development notebook showcasing the design process: I kept notes throughout the project on my updates, but I believe that I could have kept more detailed notes, including screenshots of code and better documentation of what sources I was using that day. I believe I mostly explained the final thought process in this documentation. 19/20
 3. Consistent communication with instructor every 1-2 weeks: 20/20
-4. Video showcasing final project: /5
-5. Final project: I accomplished everything I set out to wihtin my final project, and while I did not reach my stretch goals, I believe I showed both a deep understanding of the subject matter and completed a project that demonstrates this understanding. The final project is fully functional and well-documented, and includes in-server interactions (shooting, gravity, collisions) and server infrastructure (matchmaking, etc). 43/45
+4. Video showcasing final project: I am admittedly not very good at recording videos. I did my best to show the working project and a simple overview of what goes into running it outside of the code, as well as showing it running in two separate environments. However, the video was not very professional, and I believe I could have gone more into detail as to how the actual builds are set up in Unity Cloud. 4/5
+5. Final project: I accomplished everything I set out to wihtin my final project, and while I did not reach my stretch goals, I believe I showed both a deep understanding of the subject matter and completed a project that demonstrates this understanding. The final project is fully functional and well-documented, and includes in-server interactions (shooting, gravity, collisions) and server infrastructure (matchmaking, etc). I put in quite a bit of work to achieve this finished state, including a ten hour day to ensure it was ready to present, and believe that I maximized my potential for this aspect of the project. 45/45
 
 #### Final Thoughts
 
@@ -675,14 +718,3 @@ With that being said, I am very proud of what I did accomplish. The lack of docu
 [61]S. Staff, “🌟 C# Collection Types: HashSet vs. List 🚀 - Shawna Staff - Medium,” Medium, Sep. 07, 2023. https://medium.com/@shawnastaff/c-collection-types-hashset-vs-list-bae022e7b439 (accessed May 04, 2025).
 
 [62]“ClientRpc | Unity Multiplayer Networking,” docs-multiplayer.unity3d.com, Apr. 28, 2023. https://docs-multiplayer.unity3d.com/netcode/current/advanced-topics/message-system/clientrpc/
-
-
-
-
-
-
-
-
-# LEFT TO DO
-- Video (2 hours)
-- Final test and build (1 hour)
