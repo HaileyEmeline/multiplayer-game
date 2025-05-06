@@ -7,15 +7,12 @@ using UnityEngine;
 using Unity.Physics.Extensions;
 using Unity.Transforms;
 
-//Listens for player inputs
-
-//put the system in the correct group
+//Listens for player inputs and executes them for the local client
 //Only runs on client
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
 
 partial struct NetcodePlayerInputSystem : ISystem
 {
-    //public Vector3 mousePos;
     public Entity mouseEntity;
     
     //[BurstCompile]
@@ -24,7 +21,6 @@ partial struct NetcodePlayerInputSystem : ISystem
         //Requires a connection to update
         state.RequireForUpdate<NetworkStreamInGame>();
         state.RequireForUpdate<NetcodePlayerInput>();
-        //state.RequireForUpdate<MousePosition>();
 
     }
 
@@ -32,33 +28,15 @@ partial struct NetcodePlayerInputSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
 
-
-        /*if (mouseEntity == Entity.Null) {
-            mouseEntity = SystemAPI.GetSingletonEntity<MousePosition>();
-            if (mouseEntity == Entity.Null) {
-                Debug.LogError("No entity with PlayerPosition found!");
-                return;
-            }
-
-        }
-
-        //Getting mouse position?
-        float3 mousePos = new float3(Input.mousePosition.x, Input.mousePosition.y, 0f);
-
-        float3 worldPosition = Camera.main.ScreenToWorldPoint(new float3(mousePos.x, mousePos.y, 0f));
-        float3 finalPosition = new float3(worldPosition.x, worldPosition.y, 0f);
-        SystemAPI.SetComponent(mouseEntity, new MousePosition {direction = finalPosition});
-*/
-        //MousePosition.ValueRW.direction = 
-
-        //RefRW because we want ot write to it
         //MyValue is the value we created in my value authoring.cs - it is to make sure we can pass values into the server that are synchronizable.
+        //Loops through all incoming client inputs
         foreach ((
             RefRW<NetcodePlayerInput> netcodePlayerInput,
             RefRW<MyValue> myValue,
             RefRW<PhysicsVelocity> physicsVelocity,
             RefRW<PhysicsMass> physicsMass)
             in SystemAPI.Query<RefRW<NetcodePlayerInput>, RefRW<MyValue>, RefRW<PhysicsVelocity>, RefRW<PhysicsMass>>().WithAll<GhostOwnerIsLocal>()) {
+
             //This will run for each player input - client 1 can interfere with client2 inputs 
             //We include .WithAll<GhostOwnerIsLocal>() to prevent this
 
@@ -73,6 +51,7 @@ partial struct NetcodePlayerInputSystem : ISystem
                 inputVector.x = +1f;
             }
 
+            //Set the jump condition if jump key pressed
             if (Input.GetAxisRaw("Jump") > 0) {
                 netcodePlayerInput.ValueRW.jump.Set();
             } else {
@@ -81,34 +60,11 @@ partial struct NetcodePlayerInputSystem : ISystem
 
             netcodePlayerInput.ValueRW.inputVector = inputVector;
 
+
             PlayerAspect playerAspect = new PlayerAspect();
 
-            //Determines whether jumping or not - using inputevent.
-            /* if (Input.GetKeyDown(KeyCode.W)) {
-                Debug.Log("Jump! ");
-                netcodePlayerInput.ValueRW.jump.Set();
-
-                //physicsVelocity.ValueRW.ApplyLinearImpulse(physicsMass.ValueRO, playerAspect.jumpForce * math.up());
-                //inputVector.y = +10f;
-
-                float3 jumpVelocity = playerAspect.jumpForce * math.up();
-
-                physicsVelocity.ValueRW.Linear += jumpVelocity;
-            } else {
-                netcodePlayerInput.ValueRW.jump = default;
-            } */
-
-            //CODE WAS REMOVED - PUT IN TESTMYVALUESYSTEM BECAUSE IT IS
-            //CLIENT BASED HERE AND SERVER AUTHORITIVE THERE
-            //if (Input.GetKey(KeyCode.Y)) {
-            //    myValue.ValueRW.value = UnityEngine.Random.Range(100, 999);
-            //    Debug.Log("Changed " + myValue.ValueRW.value);
-            //}
-
-            //Now we need a system that uses these inputs to move the actual ghost
-
             //Bad way to manage one-off shooting:
-            if (Input.GetMouseButtonDown(0)) { //.GetMouseDown(0)
+            if (Input.GetMouseButtonDown(0)) { 
                 Debug.Log("Shoot! ");
                 netcodePlayerInput.ValueRW.shoot.Set();
             } else {
@@ -125,7 +81,8 @@ partial struct NetcodePlayerInputSystem : ISystem
     }
 
 
-//Unfinished
+//Unfinished method to see if player was grounded - could be useful later in development,
+//But not used in final project.
     private bool isGrounded(float3 playerPosition) {
         float rayLength = 1.1f; //Length of raycast to check for ground
         float3 rayStart = new float3(playerPosition.x, playerPosition.y - 1f, playerPosition.z);
@@ -143,7 +100,3 @@ partial struct NetcodePlayerInputSystem : ISystem
     }
 }
 
-/*
-public struct MousePosition : IComponentData {
-    public float3 direction;
-} */

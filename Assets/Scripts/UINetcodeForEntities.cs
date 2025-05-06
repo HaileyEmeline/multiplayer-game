@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.Networking.Transport;
 
+//Code to connect to the local server with the play button
+//Not functional in final project because the local server does not exist
+//Here to show the different process
 public class UINetcodeForEntities : MonoBehaviour
 {
 

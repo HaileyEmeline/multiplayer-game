@@ -21,7 +21,7 @@ public class Player2DAuthoring : MonoBehaviour
         PhysicsVelocity physicsVelocity = new PhysicsVelocity {Linear = float3.zero};
         entityManager.AddComponentData(playerEntity, physicsVelocity);
 
-        //Adding boxcollider
+        //Adding boxcollider to player
         entityManager.AddComponentData(playerEntity, new LocalToWorld {Value = float4x4.TRS(new float3(transform.position.x, transform.position.y, 0f), quaternion.identity, new float3(1f, 1f, 1f))} );
 
         PhysicsCollider collider = new PhysicsCollider {
@@ -31,7 +31,7 @@ public class Player2DAuthoring : MonoBehaviour
             })
         };
 
-        //Adds collider to the ground entity
+        //Adds collider to the player entity
         entityManager.AddComponentData(playerEntity, collider);
     }
 

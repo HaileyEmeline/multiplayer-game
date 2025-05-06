@@ -6,6 +6,8 @@ using Unity.Transforms;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
 
+//This file keeps track of the clients' position, physics, velocity, and more
+//Used to read player information - mostly for finding local client
 public readonly partial struct CharacterAspect : IAspect
 {
     public readonly Entity Self;

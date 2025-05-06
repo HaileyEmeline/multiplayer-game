@@ -9,10 +9,23 @@ using Unity.Services.Matchmaker;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Networking.Transport;
-//using UnityEditor.Build.Pipeline;
 
+//This script was initially used to connect the client to the local server.
+//It used the autoconnect port for netcode for entities and the local port, 7979
 [UnityEngine.Scripting.Preserve]
 public class GameBootstrap : ClientServerBootstrap {
+
+    //Now that we connect to a dedicated server, we simply return false.
+    public override bool Initialize(string defaultWorldName)
+    {
+        return false;
+    }
+
+}
+
+//PREVIOUS ATTEMPTS TO CONNECTING TO DEDICATED SERVERS
+//JUST FOR SHOWING ALL CODE I HAVE DONE
+
 
     /*
 
@@ -115,11 +128,8 @@ public class GameBootstrap : ClientServerBootstrap {
     */
 
     //For testing - removes this while we try to connect.
-    public override bool Initialize(string defaultWorldName)
-    {
-        return false;
-    }
-}
+
+
 
 /*
 async Awaitable StartServer() {

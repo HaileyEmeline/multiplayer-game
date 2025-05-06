@@ -2,6 +2,8 @@ using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
+//Was used in testing, to make sure I could add components and send RPCs to clients
+//Synchronizable between client and server
 public class MyValueAuthoring : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -43,17 +43,26 @@ public class MatchmakingManager : MonoBehaviour
 
         //entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
+        //Ensures only for client
         if (Application.platform != RuntimePlatform.LinuxServer) {
+
+            //Initialize Unity Services - for Multiplayer hosting 
             await UnityServices.InitializeAsync();
+
+            //Gets the random player ID 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             string playerId = AuthenticationService.Instance.PlayerId;
-        } else {
 
+        } else {
+//Ensures this code will not try to compile in editor even when set to Linux Server
 #if UNITY_SERVER
+
+            //Initializes Multiplay Services on the server side
             while (UnityServices.State == ServicesInitializationState.Uninitialized || UnityServices.State == ServicesInitializationState.Initializing) {
                 await Task.Yield();
             }
 
+            //Create a backfill ticket ID
             matchmakerService = MatchmakerService.Instance;
             payloadAllocation = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<PayloadAllocation>();
             backfillTicketId = payloadAllocation.BackfillTicketId;
@@ -61,31 +70,38 @@ public class MatchmakingManager : MonoBehaviour
 #endif
         }    
 
-        //Probably should be through button; for now, just straight up
-
+        //Eventually this code would be through a join button in lobby
+        //Creates a ticket using the current queue
         CreateTicketOptions createTicketOptions = new CreateTicketOptions("test");
 
-        //Should only be one player currently; list after lobby is set up
+        //Should only be one player currently; list is for multiple clients joining after Lobby is set up
         List<Unity.Services.Matchmaker.Models.Player> players = new List<Unity.Services.Matchmaker.Models.Player> { new Unity.Services.Matchmaker.Models.Player(AuthenticationService.Instance.PlayerId)};
         Debug.Log($"Player ID in Matchmaker Manager: {AuthenticationService.Instance.PlayerId}");
 
+        //Creates a ticket with the players joining and the ticket options
         CreateTicketResponse createTicketResponse = await MatchmakerService.Instance.CreateTicketAsync(players, createTicketOptions);
         currentTicket = createTicketResponse.Id;
         Debug.Log("Ticket Created!");
 
+        //Forever loop while trying to connect
+        //We can use this because matchmaker is set to time out tickets after 40 seconds, which ends this loop
         while (true) {
+
+            //Wait to hear from Matchmaker what happened to the ticket
             TicketStatusResponse ticketStatusResponse = await MatchmakerService.Instance.GetTicketAsync(createTicketResponse.Id);
 
+            //If it gets a response
             if (ticketStatusResponse.Type == typeof(MultiplayAssignment)) {
+
+                //Stores the response
                 MultiplayAssignment multiplayAssignment = (MultiplayAssignment)ticketStatusResponse.Value;
 
+                //If a server is found
                 if (multiplayAssignment.Status == MultiplayAssignment.StatusOptions.Found) {
 
-                    //await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-
+                    //Creates the client world in Unity
                     World clientWorld = ClientServerBootstrap.CreateClientWorld("ClientWorld");
                     entityManager = clientWorld.EntityManager;
-                    //World serverWorld = ClientServerBootstrap.CreateServerWorld("ServerWorld");
 
                     //Destroys the base local world
                     foreach (World world in World.All) {
@@ -95,6 +111,7 @@ public class MatchmakingManager : MonoBehaviour
                         }
                     }
 
+                    //Sets client code to apply to client world
                     if (World.DefaultGameObjectInjectionWorld == null) {
                         World.DefaultGameObjectInjectionWorld = clientWorld;
                     }
@@ -102,52 +119,45 @@ public class MatchmakingManager : MonoBehaviour
                     //Loads the game scene
                     await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single);
 
-
                     //Join server
                     int? port = multiplayAssignment.Port;
 
                     string ip = multiplayAssignment.Ip;
+
                     Debug.Log("Port: " + port);
                     Debug.Log("Ip:" + multiplayAssignment.Ip);
 
+                    //Creates an endpoint; place to connect to, using the IP and Port
                     NetworkEndpoint connectNetworkEndpoint = NetworkEndpoint.Parse(ip, ushort.Parse(port.ToString()));
                     RefRW<NetworkStreamDriver> networkStreamDriver = clientWorld.EntityManager.CreateEntityQuery(typeof(NetworkStreamDriver)).GetSingletonRW<NetworkStreamDriver>();
+
+                    //Sets the client world to be into the server
                     networkStreamDriver.ValueRW.Connect(clientWorld.EntityManager, connectNetworkEndpoint);
 
-/* #if UNITY_SERVER
-                    if (Application.platform == RuntimePlatform.LinuxServer) {
-                        foreach (var player in players) {
-                            if (!ServerPlayerTracker.ConnectedClientIds.Contains(player.Id)) {
-                                ServerPlayerTracker.ConnectedClientIds.Add(player.Id);
-
-                                //Test if it was added
-                                Debug.Log($"Connected Players: {ServerPlayerTracker.ConnectedClientIds.Count}");
-                            }
-                        }
-                    }
-#endif */
-                    //Inform the server a client is connected:
-                    
-
-                    //RefRW<NetworkStreamDriver> networkStreamDriver = serverWorld.EntityManager.CreateEntityQuery(typeof(NetworkStreamDriver)).GetSingletonRW<NetworkStreamDriver>();
-                    //networkStreamDriver.ValueRW.Listen(NetworkEndpoint.AnyIpv4.WithPort((ushort)port));
-
-                    //NetworkEndpoint connectNetworkEndpoint = NetworkEndpoint.LoopbackIpv4.WithPort((ushort)port);
-                    //networkStreamDriver = clientWorld.EntityManager.CreateEntityQuery(typeof(NetworkStreamDriver)).GetSingletonRW<NetworkStreamDriver>();
-                    //networkStreamDriver.ValueRW.Connect(clientWorld.EntityManager, connectNetworkEndpoint);
-
                     return;
+
                 }
+
                 else if (multiplayAssignment.Status == MultiplayAssignment.StatusOptions.Timeout) {
+
+                    //Server could not be found in time
                     Debug.Log("Timeout!");
                     return;
+
                 }
+
                 else if (multiplayAssignment.Status == MultiplayAssignment.StatusOptions.Failed) {
+
+                    //All servers are full, or other issue occurs
                     Debug.Log("Failed!" + multiplayAssignment.Status + " " + multiplayAssignment.Message);
                     return;
+
                 } 
                 else if (multiplayAssignment.Status == MultiplayAssignment.StatusOptions.InProgress) {
+
+                    //Sends every second to alert that is still running
                     Debug.Log("In progress");
+
                 }
             }
 
@@ -159,30 +169,43 @@ public class MatchmakingManager : MonoBehaviour
 #if UNITY_SERVER
     private void OnPlayerConnected()
     {
+
+        //Sends out a backfill ticket upon client connecting
         Debug.Log("Player connected!");
         if (Application.platform == RuntimePlatform.LinuxServer) {
             UpdateBackfillTicket();
         }
+
     }
 
     private void OnPlayerDisconnected()
     {
+
+        //Sends out an updated backfill ticket with one less client connected on disconnect
         if (Application.platform == RuntimePlatform.LinuxServer) {
             UpdateBackfillTicket();
-        }   
+        }  
+
     }
 
 #endif
 
+    //Updates backfill ticket
     private async void UpdateBackfillTicket() {
 #if UNITY_SERVER
+
+        //Creates a list of players
         List<Unity.Services.Matchmaker.Models.Player> players = new List<Unity.Services.Matchmaker.Models.Player>();
 
+        //Adds all players connected to server to list
         foreach (var playerId in ServerPlayerTracker.ConnectedClientIds) {
             players.Add(new Unity.Services.Matchmaker.Models.Player(playerId.ToString()));
         }
 
+        //States the settings of this server
         MatchProperties matchProperties = new MatchProperties(null, players, null, backfillTicketId);
+
+        //Update the backfill ticket with the list of players and match settings
         await MatchmakerService.Instance.UpdateBackfillTicketAsync(payloadAllocation.BackfillTicketId, 
             new BackfillTicket(backfillTicketId, properties: new BackfillTicketProperties(matchProperties)));
 
@@ -210,36 +233,29 @@ public class MatchmakingManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    //deallocates the servers
     private async void Update()
     {
 #if UNITY_SERVER
-        //Counts the number of clients connected
-/*         var query = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(NetworkId));
-        var networkIds = query.ToComponentDataArray<NetworkId>(Allocator.Temp);
-
-        foreach (var networkId in networkIds)
-        {
-            connectedClientCount++;
-        } */
-
-        //networkIds.Dispose();
 
         if (Application.platform == RuntimePlatform.LinuxServer) {
             
+            //Gets the number of players connected
             int connectedClientCount = ServerPlayerTracker.ConnectedClientIds.Count;
             
+            //If nobody is connected, deallocate the server
             if (connectedClientCount == 0 && !isDeallocating) {
                 isDeallocating = true;
                 deallocatingCancellationToken = false;
                 Deallocate();
             }
 
+            //If clients are connected, stop deallocating
             if (connectedClientCount != 0) {
                 isDeallocating = false;
                 deallocatingCancellationToken = true;
             }
 
+            //Approves backfill ticket if clients are connected
             if (backfillTicketId != null && connectedClientCount < 4) {
                 //Debug.Log("Backfill ticket exists !");
                 BackfillTicket backfillTicket = await MatchmakerService.Instance.ApproveBackfillTicketAsync(backfillTicketId);
@@ -248,23 +264,36 @@ public class MatchmakingManager : MonoBehaviour
 
             UpdateBackfillTicket();
 
+            //Wait one second
             await Task.Delay(1000);
         }
 #endif
     }
 
+    //Deallocates unused servers
     private async void Deallocate() {
+
         Debug.Log("Deallocating");
+
+        //Waits one minute
         await Task.Delay(60 * 1000);
 
+        //Checks again if nobody is connected
         if (ServerPlayerTracker.ConnectedClientIds.Count == 0) {
+
             Debug.Log("FINAL COUNT: " + ServerPlayerTracker.ConnectedClientIds.Count);
+
+            //Disconnects server
             Application.Quit();
+
         } else {
-            Debug.Log("Ruh roh raggy !");
+
+            Debug.Log("Server NOT deallocated!");
+
         }
     }
 
+    //Payload allocation; for backfill ticket id and queue/match information
     [System.Serializable]
     public class PayloadAllocation {
         public MatchProperties matchProperties;

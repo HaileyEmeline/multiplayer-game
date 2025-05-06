@@ -4,6 +4,7 @@ using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
+//Stores additional variables for the player, such as movement and jump height
 public partial class PlayerAspect : IAspect {
 
     public readonly RefRW<LocalTransform> localTransform;
@@ -19,18 +20,4 @@ public partial class PlayerAspect : IAspect {
 
     public float MoveSpeed { get; set; } = 10f;
 
-    
-    /* public float moveSpeed;
-    public float3 moveDirection;
-
-    public Entity playerEntity;
-
-    public PlayerAspect(Entity playerEntity, float moveSpeed, float3 moveDirection) {
-        this.playerEntity = playerEntity;
-        this.moveSpeed = moveSpeed;
-        this.moveDirection = moveDirection;
-    }
-
-    public void SetMovementSpeed(float speed) => moveSpeed = speed;
-    public void SetMovementDirection(float3 direction) => moveDirection = direction; */
 }

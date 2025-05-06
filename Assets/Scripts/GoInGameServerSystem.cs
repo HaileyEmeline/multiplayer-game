@@ -14,7 +14,6 @@ partial struct GoInGameServerSystem : ISystem
     //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        //state.RequireForUpdate<EntitiesReferences>(); - MAYBE BRING BACK ! 
         state.RequireForUpdate<NetworkId>();
     }
 
@@ -27,6 +26,7 @@ partial struct GoInGameServerSystem : ISystem
         //Used to help spawn the player object
         EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
+        //Loops through all RPC requests from clients
         foreach ((RefRO<ReceiveRpcCommandRequest> ReceiveRpcCommandRequest, RefRO<GoInGameRequestRPC> goInGameRequest,
                   Entity entity) 
                   in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<GoInGameRequestRPC>>().WithAll<GoInGameRequestRPC>().WithEntityAccess()) {
@@ -43,14 +43,12 @@ partial struct GoInGameServerSystem : ISystem
                       
                       //Sets random location for player upon spawn
                       entityCommandBuffer.SetComponent(playerEntity, LocalTransform.FromPosition(new Unity.Mathematics.float3(
-                        UnityEngine.Random.Range(-10, +10), 0, 0
+                        UnityEngine.Random.Range(-8, +8), 0, 0
                       )));
 
                       //Gets the network ID for the server to use in the ghostowner below
                       NetworkId networkId = SystemAPI.GetComponent<NetworkId>(ReceiveRpcCommandRequest.ValueRO.SourceConnection);
                       //var localPlayerId = SystemAPI.GetSingleton<NetworkId>().Value;
-
-                      
 
                       //We set up hasOwner to be true in the prefab, so that the client owns
                       //the playable character instead of the server. Now we have to set that up here:
@@ -58,10 +56,11 @@ partial struct GoInGameServerSystem : ISystem
                         NetworkId = networkId.Value,
                       });
 
-                      Debug.Log($"PlayerID: " + goInGameRequest.ValueRO.AuthPlayerId.ToString()); // shouldn't print null
+                      //Adds the Player ID to a list of connected IDs, used for backfill
+                      Debug.Log($"PlayerID: " + goInGameRequest.ValueRO.AuthPlayerId.ToString());
                       ServerPlayerTracker.ConnectedClientIds.Add(goInGameRequest.ValueRO.AuthPlayerId.ToString());
-                      //Says ghost owner is the one who sent the RPC, which was the cleint ^^
 
+                      //Prints number of clients connected
                       Debug.Log($"Connected Client ID count: {ServerPlayerTracker.ConnectedClientIds.Count}");
 
 

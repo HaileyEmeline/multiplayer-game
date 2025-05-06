@@ -1,11 +1,13 @@
 using Unity.Entities;
 using UnityEngine;
 
-//Converts the gameobject prefab into an entities prefab
+//Converts the gameobject prefabs into an entities prefab
 public class EntitiesReferencesAuthoring : MonoBehaviour
 {
 
+    //For the player prefab
     public GameObject playerPrefabGameObject;
+
     //For the bullet prefab
     public GameObject bulletPrefabGameObject;
 

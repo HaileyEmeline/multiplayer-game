@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using Unity.NetCode;
 using UnityEngine;
 
+//Adds input to entities
 public class NetcodePlayerInputAuthoring : MonoBehaviour
 {
     public class Baker : Baker<NetcodePlayerInputAuthoring> {
@@ -17,12 +18,6 @@ public class NetcodePlayerInputAuthoring : MonoBehaviour
 //Special type; icomponent data set up in a special way to handle inputs - has a buffer compatible with things like prediction
 public struct NetcodePlayerInput : IInputComponentData {
     public float2 inputVector;
-
-    //Wrong way to handle one-off inputs
-    //public bool shoot;
-
-    //Correct way:
-
     public InputEvent jump;
     public InputEvent shoot;
 }

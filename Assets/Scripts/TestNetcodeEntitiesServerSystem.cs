@@ -3,6 +3,7 @@ using Unity.Entities;
 using UnityEngine;
 using Unity.NetCode;
 
+//Receives RPCs on the server side; done in other ways for other types of RPCs, this was just done to show how code works.
 [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
 partial struct TestNetcodeEntitiesServerSystem : ISystem
 {

@@ -10,6 +10,7 @@ public class GroundAuthoring : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //Creates an entity manager
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         //Creates the ground entity

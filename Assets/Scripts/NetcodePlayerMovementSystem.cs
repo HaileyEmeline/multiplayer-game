@@ -19,9 +19,10 @@ partial struct NetcodePlayerMovementSystem : ISystem
     //[BurstCompile]
     public void OnCreate(ref SystemState state)
     {
+
         //Tries to make the playerposition struct to always update position
         playerEntity = state.EntityManager.CreateEntity(typeof(PlayerPosition));
-        //state.EntityManager.SetComponentData(playerEntity, new PlayerPosition { position = new Vector3(0, 0, 0) });
+
     }
 
     //[BurstCompile]
@@ -36,6 +37,7 @@ partial struct NetcodePlayerMovementSystem : ISystem
                   in SystemAPI.Query<RefRW<NetcodePlayerInput>, RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRW<PhysicsMass>>().WithAll<Simulate>()) //SWITCH TO SIMULATE?
         { //WithAll important for this updateingroup group type
 
+            //Sets the move speed and jump height
             float moveSpeed = 10f;
             float jumpImpulse = 10f;
 
@@ -43,36 +45,23 @@ partial struct NetcodePlayerMovementSystem : ISystem
             physicsVelocity.ValueRW.Linear.z = netcodePlayerInput.ValueRO.inputVector.y * moveSpeed;  // Horizontal movement forward-backward (Z)
 
             // Jump logic - apply upward force (impulse) when the jump button is pressed
-            //if (Input.GetKeyDown(KeyCode.W) && Mathf.Abs(physicsVelocity.ValueRW.Linear.y) < 0.01f) // Check if the player presses the jump key
+            // Only applies when the player is not falling (thus grounded)
             if (netcodePlayerInput.ValueRO.jump.IsSet && Mathf.Abs(physicsVelocity.ValueRW.Linear.y) < 0.01f)
-            { //Input.GetAxisRaw("Jump") ^^
-                //Debug.Log("Jump! ");
-                //netcodePlayerInput.ValueRW.jump.Set();
+            { 
 
-                // Apply upward impulse (force) to the player's physics velocity
-                 // Define jump force (you can adjust this value as needed)
-                
-                physicsVelocity.ValueRW.Linear.y = 0; //new Vector3(physicsVelocity.ValueRO.Linear.x, )
-                //physicsVelocity.ValueRW.Linear.y += jumpImpulse;  // Apply vertical velocity for jumping
+                physicsVelocity.ValueRW.Linear.y = 0; 
+
+                //Modifies the physics y value of the player by the jump height
                 physicsVelocity.ValueRW.Linear.y = netcodePlayerInput.ValueRO.inputVector.y + jumpImpulse;
+
                 Debug.Log("Jump! ");
             } 
             else
             {
                 netcodePlayerInput.ValueRW.jump = default;
             }
-                      //float3 moveVector = new float3(netcodePlayerInput.ValueRO.inputVector.x, 0, netcodePlayerInput.ValueRO.inputVector.y);
-
-                      //float moveVector = netcodePlayerInput.ValueRO.inputVector.x;
-                      //float movePhysics = netcodePlayerInput.ValueRO.
-
-                      //localTransform.ValueRW.Position.x += moveVector * moveSpeed * SystemAPI.Time.fixedDeltaTime;
-
-                      //localTransform.ValueRW.Position += moveVector * moveSpeed * SystemAPI.Time.fixedDeltaTime;
-
-                      //Make sure scale does not change:
                       
-                  }
+        }
     }
 
     //[BurstCompile]
@@ -81,13 +70,13 @@ partial struct NetcodePlayerMovementSystem : ISystem
         
     }
 
-    //[BurstCompile]
-    private void SetRotation(Entity player, LocalTransform playerTransform) { //Add player aspect?
-        //Sets player to face direction moving - come back to this
+    //Unused in final project
+    private void SetRotation(Entity player, LocalTransform playerTransform) { 
+    
     }
 
-    //[BurstCompile]
-    private void SetVelocity(Entity player, PhysicsVelocity playerVelocity, PlayerAspect playerAspect) { //Add player aspect?
+    //Unused in final project
+    private void SetVelocity(Entity player, PhysicsVelocity playerVelocity, PlayerAspect playerAspect) { 
         
         
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer();
@@ -100,11 +89,13 @@ partial struct NetcodePlayerMovementSystem : ISystem
     }
 }
 
+//Stores player position to send
 public struct PlayerPosition : IComponentData
 { 
     public Vector3 position;
 }
 
+//Stores mouse position to send
 public struct MousePosition : IInputComponentData {
     public float3 direction;
 }

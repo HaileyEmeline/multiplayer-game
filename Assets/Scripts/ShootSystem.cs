@@ -16,20 +16,16 @@ partial struct ShootSystem : ISystem
         //Ensure that EntitiesReferences is available before accessing it
         if (!SystemAPI.TryGetSingleton<EntitiesReferences>(out var entitiesRef))
         {
-        //UnityEngine.Debug.LogWarning("EntitiesReferences not available yet, skipping system update.");
             return;
         }
-        //Get the network time
-        //NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
 
         // Ensure that NetworkTime is available before accessing it
         if (!SystemAPI.TryGetSingleton<NetworkTime>(out var networkTime))
         {
-            //UnityEngine.Debug.LogWarning("NetworkTime not available yet, skipping system update.");
             return;
         }
 
-        //Allows us to grab reference for the bullet entity
+        //Allows us to grab reference, and later delete it, for the bullet entity
         EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
 
@@ -45,16 +41,16 @@ partial struct ShootSystem : ISystem
             //Only tests if this is the first time a tick is predicted - if tick is wrong it resets and reruns predictions
             if (networkTime.IsFirstTimeFullyPredictingTick) {
 
+                //If the button has been pressed
                 if (netcodePlayerInput.ValueRO.shoot.IsSet) {
 
                     UnityEngine.Debug.Log("Shoot true!" + state.World);
-
-                    //Spawn the bullet object with prefab
 
                     //Verify it exists (bug fixing)
                     if (entitiesReferences.bulletPrefabEntity == Entity.Null) {
                         UnityEngine.Debug.LogError("Bullet prefab entity is null :(");
                     }
+
                     Entity bulletEntity = entityCommandBuffer.Instantiate(entitiesReferences.bulletPrefabEntity);
 
                     //Spawn it onto player

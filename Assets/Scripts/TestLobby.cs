@@ -8,6 +8,7 @@ using UnityEngine;
 using Unity.NetCode;
 using JetBrains.Annotations;
 
+//Lobby code - functional but not used in final project
 public class TestLobby : MonoBehaviour
 {
 

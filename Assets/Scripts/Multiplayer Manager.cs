@@ -23,49 +23,40 @@ public class MultiplayerManager : MonoBehaviour
 
 #if UNITY_SERVER 
     ServerConfig serverConfig;
-
     private IServerQueryHandler serverQueryHandler;
     World serverWorld;
 #endif
 
-    //TODO: Make a singleton to store this
     private static bool isServerRunning = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private async void Start()
     {
 #if UNITY_SERVER
-        //var myFile = "myfile.txt";
 
-        //Only works server side - no errors but does not work at all? 
+        //Only works server side
         if (Application.platform == RuntimePlatform.LinuxServer) {
+
             //Init server code
             await UnityServices.InitializeAsync();
             Debug.Log("Multiplayer Initialized!");
 
             Debug.Log(UnityServices.State);
 
-            //Print if initialized.
+            //Retrieves server IP and port
             serverConfig = MultiplayService.Instance.ServerConfig;
             Debug.Log("Server Config Retrieved!");
             
-            //Creates a text file for testing, to show works in both Dedicated Server logs and Unity logs
-            //if (File.Exists(myFile)) {
-            //    return;
-            //}
-
-            //var sr = File.CreateText(myFile);
-            //sr.WriteLine($"Server Config Port {serverConfig.Port}");
-
             Debug.Log("Server Port: " + serverConfig.Port);
             Debug.Log("Server ID: " + serverConfig.AllocationId);
 
+            //Sets up server for game settings
             serverQueryHandler = await MultiplayService.Instance.StartServerQueryHandlerAsync(10, "MyServer", "MyGameType", "0", "TestMap");
 
+            //Checks to make sure a server exists
             if (serverConfig.AllocationId != string.Empty) {
 
-                //await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-
+                //Creates a server world
                 serverWorld = ClientServerBootstrap.CreateServerWorld("serverWorld");
 
                 //Destroys the base local world
@@ -80,8 +71,8 @@ public class MultiplayerManager : MonoBehaviour
                     World.DefaultGameObjectInjectionWorld = serverWorld;
                 }
 
-                await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single); //Maybe comment out
-
+                //Loads current scene in server
+                await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single); 
 
                 //Set connection data and start the server in Unity
                 RefRW<NetworkStreamDriver> networkStreamDriver = serverWorld.EntityManager.CreateEntityQuery(typeof(NetworkStreamDriver)).GetSingletonRW<NetworkStreamDriver>();
@@ -95,35 +86,6 @@ public class MultiplayerManager : MonoBehaviour
 
         } else {
 
-            //JoinToServer();
-            //Connect client 
-
-            /*
-            Debug.Log("Client Joined!");
-            World clientWorld = ClientServerBootstrap.CreateClientWorld("ClientWorld");
-
-            //Destroys the base local world
-            foreach (World world in World.All) {
-                if (world.Flags == WorldFlags.Game) {
-                    world.Dispose();
-                    break;
-                }
-            }
-
-            if (World.DefaultGameObjectInjectionWorld == null) {
-                World.DefaultGameObjectInjectionWorld = clientWorld;
-            }
-
-            await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single);
-
-            ushort port = serverConfig.Port;
-            string ip = serverConfig.IpAddress;
-
-            NetworkEndpoint connectNetworkEndpoint = NetworkEndpoint.Parse(ip, port);
-            RefRW<NetworkStreamDriver> networkStreamDriver = clientWorld.EntityManager.CreateEntityQuery(typeof(NetworkStreamDriver)).GetSingletonRW<NetworkStreamDriver>();
-            networkStreamDriver.ValueRW.Connect(clientWorld.EntityManager, connectNetworkEndpoint);
-
-            Debug.Log("Client connected!"); */
         }
 #endif
     }                
@@ -158,7 +120,7 @@ public class MultiplayerManager : MonoBehaviour
     }
 
 
-
+//My initial join code - not what I ended up using, but a concept that led me in the right direction
 #if UNITY_SERVER
     public void JoinToServer() {
 
@@ -192,6 +154,7 @@ public class MultiplayerManager : MonoBehaviour
 
     }
 
+    //Dispose of query handler - removes memory leaks
     private void OnApplicationQuit() {
         serverQueryHandler?.Dispose();
     }
@@ -201,32 +164,15 @@ public class MultiplayerManager : MonoBehaviour
         serverQueryHandler?.Dispose();
     }
 
-    /* private void UpdatePlayerList() {
-        if (Application.platform != RuntimePlatform.LinuxServer) return;
-        
-        if (serverWorld == null) return;
-        var entityManager = serverWorld.EntityManager;
-        var query = entityManager.CreateEntityQuery(typeof(NetworkId));
-
-        var networkIds = query.ToComponentDataArray<NetworkId>(Allocator.Temp);
-
-        ServerPlayerTracker.ConnectedClientIds.Clear();
-        foreach (var id in networkIds) {
-            ServerPlayerTracker.ConnectedClientIds.Add(id.Value.ToString());
-        }
-
-        networkIds.Dispose();
-    } */
-
-
-
 #endif
 
 } 
 
 
 
-/* ORIGINAL START
+/* ORIGINAL START - TO SHOW WORK
+
+
 private async void Start()
     {
 

@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
+//A test to see if I could pass client values to server 
 partial struct TestMyValueSystem : ISystem
 {
 

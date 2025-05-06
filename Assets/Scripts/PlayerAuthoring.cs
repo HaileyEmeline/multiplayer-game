@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 //using Unity.NetCode;
 
+//Attaches a ghost component to the player entity
 public class PlayerAuthoring : MonoBehaviour
 {
 
@@ -16,14 +17,6 @@ public class PlayerAuthoring : MonoBehaviour
             //Maybe remove? Initializes the IComponentData
             AddComponent(entity, new PlayerInputStateGhost());
 
-            //Entity Camera = GetEntity(TransformUsageFlags.Dynamic); //new
-            //AddComponent(entity, Camera);
-            /* AddComponent(GetEntity(TransformUsageFlags.Dynamic), new Player 
-            {
-                Entity entity = GetEntity(TransformUsageFlags.Dynamic),
-
-                Camera = GetEntity(authoring.Camera, TransformUsageFlags.Dynamic);
-            }); */
         }
     }
 }
